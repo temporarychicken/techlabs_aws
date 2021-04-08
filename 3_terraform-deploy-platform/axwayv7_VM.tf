@@ -1,13 +1,13 @@
-resource "aws_instance" "techlab1234-axwayv7" {
-  ami                         = data.aws_ami.techlab1234-axwayv7.id # eu-west-2
+resource "aws_instance" "techlab0001-axwayv7" {
+  ami                         = data.aws_ami.techlab0001-axwayv7.id # eu-west-2
   instance_type               = "t2.large"
-  key_name                    = "techlab1234-axwayv7-key"
-  security_groups             = [aws_security_group.techlab1234-nginx-web-facing.id]
-  subnet_id                   = aws_subnet.techlab1234-main.id
+  key_name                    = "techlab0001-axwayv7-key"
+  security_groups             = [aws_security_group.techlab0001-nginx-web-facing.id]
+  subnet_id                   = aws_subnet.techlab0001-main.id
   private_ip                  = "10.0.1.20"
   
   tags = {
-    Name = "techlab1234-axwayv7"
+    Name = "techlab0001-axwayv7"
   }
 
   
@@ -20,7 +20,7 @@ resource "aws_instance" "techlab1234-axwayv7" {
 resource "null_resource" "post-instantiation-VM-actions" {
   # Changes to any instance of the cluster requires re-provisioning
   triggers = {
-    trigger1 = aws_route53_record.techlab1234-apimanager.ttl
+    trigger1 = aws_route53_record.techlab0001-apimanager.ttl
   }
   
   provisioner "remote-exec" {
@@ -29,7 +29,7 @@ resource "null_resource" "post-instantiation-VM-actions" {
     type     = "ssh"
     user     = "ubuntu"
 	private_key = file("../keys/axwayv7-key.pem")
-    host     = aws_instance.techlab1234-axwayv7.public_ip
+    host     = aws_instance.techlab0001-axwayv7.public_ip
   }
   
         inline = [
@@ -43,6 +43,7 @@ resource "null_resource" "post-instantiation-VM-actions" {
   }
 
 }
+
 
 
 
