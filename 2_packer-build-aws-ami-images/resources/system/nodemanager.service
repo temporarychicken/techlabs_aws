@@ -1,0 +1,12 @@
+[Unit]
+Description=Axway Node Manager Service
+After=cassandra-online.target
+
+[Service]
+ExecStart=/opt/Axway-7.7.0/apigateway/posix/bin/nodemanager
+#User=azureuser
+#Group=azureuser
+
+[Install]
+WantedBy=multi-user.target
+

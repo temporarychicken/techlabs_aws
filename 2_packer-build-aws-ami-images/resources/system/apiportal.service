@@ -1,0 +1,9 @@
+[Unit]
+Description=API Portal Service
+
+[Service]
+ExecStart=/home/azureuser/scripts/apiportal.sh
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,11 @@
+[Unit]
+Description=Apigee Discovery Agent Service
+After=quickstart-online.target
+
+[Service]
+User=azureuser
+ExecStart=/home/azureuser/scripts/apigee_discovery_agent.sh
+
+[Install]
+WantedBy=multi-user.target
+

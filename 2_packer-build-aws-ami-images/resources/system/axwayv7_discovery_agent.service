@@ -1,0 +1,10 @@
+[Unit]
+Description=Axway V7 Discovery Agent Service
+After=quickstart-online.target
+
+[Service]
+ExecStart=/home/azureuser/scripts/axwayv7_discoveryagent.sh
+
+[Install]
+WantedBy=multi-user.target
+

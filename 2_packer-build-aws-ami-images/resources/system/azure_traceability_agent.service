@@ -1,0 +1,10 @@
+[Unit]
+Description=Azure Traceability Agent Service
+After=quickstart-online.target
+
+[Service]
+ExecStart=/home/azureuser/scripts/azure_traceability_agent.sh
+
+[Install]
+WantedBy=multi-user.target
+

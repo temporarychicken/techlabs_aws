@@ -1,0 +1,11 @@
+[Unit]
+Description=Cassandra Service
+
+[Service]
+#User=azureuser
+#Group=azureuser
+ExecStart=/home/ubuntu/resources/scripts/cassandra.sh
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,110 @@
+{
+  "description": "Create an NGINX Plus and two NGINX Open Source Images",
+  "variables": {
+    "home": "{{env `HOME`}}",
+    "aws_access_key": "",
+    "aws_secret_key": "",
+    "region": "eu-west-2"
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "name": "techlab0001-axwayv7",
+      "ami_name": "techlab0001-axwayv7-{{isotime \"2006-01-02\"}}-{{uuid}}",
+      "instance_type": "t2.large",
+      "region": "{{user `region`}}",
+      "source_ami": "ami-006a0174c6c25ac06",
+      "ssh_username": "ubuntu",
+      "access_key": "{{user `aws_access_key`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "tags": {
+        "Name": "techlab0001-axwayv7"
+      }
+    }
+  ],
+  "provisioners": [
+
+    {
+      "type": "file",
+      "source": "resources",
+      "destination": "resources",
+      "only": [
+        "techlab0001-axwayv7"
+      ]
+    },
+
+    {
+      "type": "file",
+      "source": "../certs",
+      "destination": "certs",
+      "only": [
+        "techlab0001-axwayv7"
+      ]
+    },
+
+    {
+      "type": "shell",
+      "inline": [
+      "ls -la certs",
+	  "sudo hostnamectl set-hostname apimanager",
+	  "chmod +x resources/scripts/*",
+	  "sudo cp resources/system/cassandra.service /etc/systemd/system",
+	  "sudo systemctl enable cassandra",
+	  "sudo cp resources/system/nodemanager.service /etc/systemd/system",
+	  "sudo systemctl enable nodemanager",
+	  "sudo cp resources/system/quickstart.service /etc/systemd/system",
+	  "sudo systemctl enable quickstart",
+	  "wget https://packer-build-resources.s3.eu-west-2.amazonaws.com/APIGateway_7.7.20210130_Install_linux-x86-64_BN04.run",
+	  "chmod +x APIGateway_7.7.20210130_Install_linux-x86-64_BN04.run",
+	  "sudo apt-get update -y",
+	  "sudo apt-get install openjdk-8-jre-headless -y",
+	  
+
+      "sudo ./APIGateway_7.7.20210130_Install_linux-x86-64_BN04.run --mode unattended --unattendedmodeui minimalWithDialogs --nmHostnameOrIpChoice 127.0.0.1 --rnmConnectionUrl https://127.0.0.1:8090 --setup_type complete --adminpasswd Space*117 --changeCredentials 0 --apimgmtusername apiadmin --apiadminpasswd Space*117 --changeApimgmtCredentials 0 --licenseFilePath resources/api7.lic --analyticsLicenseFilePath resources/api7.lic --apimgmtLicenseFilePath resources/api7.lic --prefix /opt/Axway-7.7.0 --cassandraInstalldir /opt --cassandraJDK  /usr/lib/jvm/java-8-openjdk-amd64/jre --startCassandra 0",
+
+      "#sudo ./APIGateway_7.7.20210130_Install_linux-x86-64_BN04.run --mode unattended --setup_type complete --adminpasswd Space*117 --changeCredentials 0 --apiadminpasswd Space*117 --changeApimgmtCredentials 0 --licenseFilePath resources/api7.lic --analyticsLicenseFilePath resources/api7.lic --apimgmtLicenseFilePath resources/api7.lic --prefix /opt/Axway-7.7.0 --cassandraInstalldir /opt/db --cassandraJDK  /usr/lib/jvm/java-8-openjdk-amd64/jre --startCassandra 0",
+	  
+	  "#sudo ./APIGateway_7.7.20210130_Install_linux-x86-64_BN04.run --mode unattended --setup_type complete --licenseFilePath resources/api7.lic --analyticsLicenseFilePath resources/api7.lic --apimgmtLicenseFilePath resources/api7.lic --prefix /opt/Axway-7.7.0 --cassandraInstalldir /opt/db --cassandraJDK  /usr/lib/jvm/java-8-openjdk-amd64/jre --startCassandra 0",
+	  "#sudo ./APIGateway_7.7.20210130_Install_linux-x86-64_BN04.run --mode unattended --setup_type complete --licenseFilePath api7.lic --analyticsLicenseFilePath api7.lic --apimgmtLicenseFilePath api7.lic --prefix /opt/Axway-7.7latest --cassandraInstalldir /opt/db/cassandra --cassandraJDK  /usr/lib/jvm/default-java/ --startCassandra 1",
+	  "#sudo -H apt-get update -y",
+	  "#sudo -H apt-get upgrade -y",
+	  
+      "#sudo -H apt-get update -y",
+      "sudo -H apt-get install -y nginx",
+      "#sudo -H systemctl enable nginx",
+	  "cat certs/techlab0001.axwaydemo.net.crt.pem certs/techlab0001.axwaydemo.net.issuer.pem >certs/fullchain.pem",
+	  "cp certs/techlab0001.axwaydemo.net.key.pem certs/privkey.pem",
+	  "sudo cp resources/default /etc/nginx/sites-enabled",
+	  "sudo nginx -s reload",
+
+	  "ssh-keygen -f /tmp/sshkey -q -N ''",
+   	  "chmod +r /tmp/sshkey"
+      ],
+      "only": [
+        "techlab0001-axwayv7"
+      ]
+    },
+
+
+
+   {
+      "type": "file",
+      "destination": "../keys/axwayv7-key.pub",
+      "source": "/tmp/sshkey.pub",
+	  "direction" : "download",
+      "only": [
+        "techlab0001-axwayv7"
+      ]
+    },
+   {
+      "type": "file",
+      "destination": "../keys/axwayv7-key.pem",
+      "source": "/tmp/sshkey",
+	  "direction" : "download",
+      "only": [
+        "techlab0001-axwayv7"
+      ]
+    }
+	
+  ]
+}

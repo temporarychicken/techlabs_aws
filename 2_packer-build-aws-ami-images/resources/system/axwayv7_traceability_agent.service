@@ -1,0 +1,11 @@
+[Unit]
+Description=Traceability Agent Service
+After=quickstart-online.target
+
+[Service]
+User=azureuser
+ExecStart=/home/azureuser/scripts/axwayv7_traceabilityagent.sh
+
+[Install]
+WantedBy=multi-user.target
+

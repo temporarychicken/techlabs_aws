@@ -1,0 +1,135 @@
+server {
+    return 301 https://$host$request_uri;
+    listen 80 ;
+    listen [::]:80 ;
+    server_name techlab0001.axwaydemo.net;
+
+}
+
+server {
+    server_name apibuilder.techlab0001.axwaydemo.net;
+    listen 443 ssl;
+    ssl_certificate /home/ubuntu/certs/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /home/ubuntu/certs/privkey.pem; # managed by Certbot
+    #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+    location / {
+        auth_basic              "Please enter API Builder Password";
+        auth_basic_user_file    /etc/nginx/.htpasswd;
+
+        proxy_set_header        Host $host;
+        proxy_set_header        X-Real-IP $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header        X-Forwarded-Proto $scheme;
+        proxy_pass http://localhost:8083;
+    }
+
+    location /api/ {
+        #auth_basic              "Please enter API Builder Password";
+        #auth_basic_user_file    /etc/nginx/.htpasswd;
+
+        proxy_set_header        Host $host;
+        proxy_set_header        X-Real-IP $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header        X-Forwarded-Proto $scheme;
+        proxy_pass http://localhost:8083;
+    }
+}
+
+server {
+    server_name apimanager.techlab0001.axwaydemo.net;
+    listen 443 ssl;
+    ssl_certificate /home/ubuntu/certs/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /home/ubuntu/certs/privkey.pem; # managed by Certbot
+    #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbo
+      #proxy_set_header        Host $host;     # proxy_set_header        Host $host;
+
+    location / {
+        proxy_set_header        Host $host;
+        proxy_set_header        X-Real-IP $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header        X-Forwarded-Proto $scheme;
+        proxy_pass https://10.0.1.20:8075;
+    }
+
+}
+
+server {
+    server_name apigateway.techlab0001.axwaydemo.net;
+    listen 443 ssl;
+    ssl_certificate /home/ubuntu/certs/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /home/ubuntu/certs/privkey.pem; # managed by Certbot
+    #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+    location / {
+        proxy_set_header        Host $host;
+        proxy_set_header        X-Real-IP $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header        X-Forwarded-Proto $scheme;
+        proxy_pass https://10.0.1.20:8090;
+    }
+}
+
+server {
+    server_name api.techlab0001.axwaydemo.net;
+    listen 443 ssl;
+    ssl_certificate /home/ubuntu/certs/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /home/ubuntu/certs/privkey.pem; # managed by Certbot
+    #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+    location / {
+        proxy_set_header        Host $host;
+        proxy_set_header        X-Real-IP $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header        X-Forwarded-Proto $scheme;
+        proxy_pass https://10.0.1.20:8065;
+    }
+}
+
+
+server {
+    server_name jenkins.techlab0001.axwaydemo.net;
+    listen 443 ssl;
+    ssl_certificate /home/ubuntu/certs/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /home/ubuntu/certs/privkey.pem; # managed by Certbot
+    #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+    location / {
+        auth_basic              "Please enter Jenkins Password";
+        auth_basic_user_file    /etc/nginx/.htpasswd;
+
+        proxy_set_header        Host $host;
+        proxy_set_header        X-Real-IP $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header        X-Forwarded-Proto $scheme;
+        proxy_pass http://127.0.0.1:32080;
+    }
+}
+
+
+server {
+    server_name apiportal.techlab0001.axwaydemo.net;
+    listen 443 ssl;
+    ssl_certificate /home/ubuntu/certs/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /home/ubuntu/certs/privkey.pem; # managed by Certbot
+    #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+    location / {
+
+        proxy_set_header        Host $host;
+        proxy_set_header        X-Real-IP $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header        X-Forwarded-Proto $scheme;
+        proxy_pass http://127.0.0.1:32081;
+    }
+}

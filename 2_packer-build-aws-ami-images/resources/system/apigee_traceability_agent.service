@@ -1,0 +1,11 @@
+[Unit]
+Description=Apigee Traceability Agent Service
+After=quickstart-online.target
+
+[Service]
+User=azureuser
+ExecStart=/home/azureuser/scripts/apigee_traceability_agent.sh
+
+[Install]
+WantedBy=multi-user.target
+

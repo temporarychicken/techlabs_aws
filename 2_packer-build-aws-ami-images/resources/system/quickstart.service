@@ -1,0 +1,12 @@
+[Unit]
+Description=Axway QuickStart Server Service
+After=nodemanager-online.target
+
+[Service]
+ExecStart=/home/ubuntu/resources/scripts/quickstart.sh
+#User=azureuser
+#Group=azureuser
+
+[Install]
+WantedBy=multi-user.target
+
