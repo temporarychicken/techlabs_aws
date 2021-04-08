@@ -1,7 +1,7 @@
-resource "aws_security_group" "techlab0001-nginx-web-facing" {
+resource "aws_security_group" "techlab1234-nginx-web-facing" {
   name        = "nginx-web-facing"
   description = "Allow TLS,HTTP,SSH inbound traffic"
-  vpc_id      = aws_vpc.techlab0001-main.id
+  vpc_id      = aws_vpc.techlab1234-main.id
 
   ingress {
     description = "HTTPS"
@@ -66,3 +66,7 @@ resource "aws_security_group" "techlab0001-nginx-web-facing" {
     Name = "workshop0001-axwayv7"
   }
 }
+
+
+
+
