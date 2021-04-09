@@ -34,8 +34,19 @@ The default subdomain is **techlab0001**.
     cd ..\3_terraform-deploy-platform\
     .\deploy_axway_v7_platform_in_AWS.ps1
     
-### Access your online API Manager
+### Access your online Axway Resources
+
+#### API Manager
 
 https://apimanager.mycompanyname.axwaydemo.net
+
+#### API Gateway Manager
+
 https://apigateway.mycompanyname.axwaydemo.net
+
+#### API Builder
+
+https://apibuilder.mycompanyname.axwaydemo.net
+
+
 

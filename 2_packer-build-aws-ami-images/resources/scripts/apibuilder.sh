@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cd /home/azureuser/mybuilderproject
+cd /home/ubuntu/mybuilderproject
 npm start
 

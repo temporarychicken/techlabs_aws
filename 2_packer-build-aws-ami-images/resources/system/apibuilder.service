@@ -2,7 +2,7 @@
 Description=API Builder Service
 
 [Service]
-ExecStart=/home/azureuser/scripts/apibuilder.sh
+ExecStart=/home/ubuntu/resources/scripts/apibuilder.sh
 
 [Install]
 WantedBy=multi-user.target
