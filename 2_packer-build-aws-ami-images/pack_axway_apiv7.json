@@ -9,8 +9,8 @@
   "builders": [
     {
       "type": "amazon-ebs",
-      "name": "techlab0001-axwayv7",
-      "ami_name": "techlab0001-axwayv7-{{isotime \"2006-01-02\"}}-{{uuid}}",
+      "name": "techlab-axwayv7",
+      "ami_name": "techlab-axwayv7-{{isotime \"2006-01-02\"}}-{{uuid}}",
       "instance_type": "t2.large",
       "region": "{{user `region`}}",
       "source_ami": "ami-006a0174c6c25ac06",
@@ -18,7 +18,7 @@
       "access_key": "{{user `aws_access_key`}}",
       "secret_key": "{{user `aws_secret_key`}}",
       "tags": {
-        "Name": "techlab0001-axwayv7"
+        "Name": "techlab-axwayv7"
       }
     }
   ],
@@ -29,7 +29,7 @@
       "source": "resources",
       "destination": "resources",
       "only": [
-        "techlab0001-axwayv7"
+        "techlab-axwayv7"
       ]
     },
 
@@ -38,7 +38,7 @@
       "source": "../certs",
       "destination": "certs",
       "only": [
-        "techlab0001-axwayv7"
+        "techlab-axwayv7"
       ]
     },
 
@@ -72,16 +72,16 @@
       "#sudo -H apt-get update -y",
       "sudo -H apt-get install -y nginx",
       "#sudo -H systemctl enable nginx",
-	  "cat certs/techlab0001.axwaydemo.net.crt.pem certs/techlab0001.axwaydemo.net.issuer.pem >certs/fullchain.pem",
-	  "cp certs/techlab0001.axwaydemo.net.key.pem certs/privkey.pem",
+	  "#cat certs/techlab0001.axwaydemo.net.crt.pem certs/techlab0001.axwaydemo.net.issuer.pem >certs/fullchain.pem",
+	  "#cp certs/techlab0001.axwaydemo.net.key.pem certs/privkey.pem",
 	  "sudo cp resources/default /etc/nginx/sites-enabled",
-	  "sudo nginx -s reload",
+	  "#sudo nginx -s reload",
 
 	  "ssh-keygen -f /tmp/sshkey -q -N ''",
    	  "chmod +r /tmp/sshkey"
       ],
       "only": [
-        "techlab0001-axwayv7"
+        "techlab-axwayv7"
       ]
     },
 
@@ -93,7 +93,7 @@
       "source": "/tmp/sshkey.pub",
 	  "direction" : "download",
       "only": [
-        "techlab0001-axwayv7"
+        "techlab-axwayv7"
       ]
     },
    {
@@ -102,7 +102,7 @@
       "source": "/tmp/sshkey",
 	  "direction" : "download",
       "only": [
-        "techlab0001-axwayv7"
+        "techlab-axwayv7"
       ]
     }
 	

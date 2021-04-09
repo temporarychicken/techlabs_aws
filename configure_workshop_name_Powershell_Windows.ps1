@@ -6,6 +6,7 @@ if ( $currentsubdomain -eq '' )
 
 echo $currentsubdomain
 
+# CONFIGURE CHAPTER 1 TERRAFORM FILES
 
 $newsubdomain = Read-Host -Prompt 'Input the subdomain name for your techlab. The resultant domain name for your techlab will be <<yourinput>>.axwaydemo.net'
 
@@ -17,16 +18,19 @@ Foreach-Object {
 }
 
 
-Get-ChildItem ".\2_packer-build-aws-ami-images\" -Filter *.json | 
-Foreach-Object {
+#Get-ChildItem ".\2_packer-build-aws-ami-images\" -Filter *.json | 
+#Foreach-Object {
+#
+#    ((Get-Content -path .\2_packer-build-aws-ami-images\$_ -raw) -replace $currentsubdomain,$newsubdomain ) | Set-Content -path .\2_packer-build-aws-ami-images\$_
+#
+#}
 
-    ((Get-Content -path .\2_packer-build-aws-ami-images\$_ -raw) -replace $currentsubdomain,$newsubdomain ) | Set-Content -path .\2_packer-build-aws-ami-images\$_
 
-}
-
+# CONFIGURE NGINX CONFIG FILE WITH CORRECT SUBDOMAIN NAMES
 
 ((Get-Content -path .\2_packer-build-aws-ami-images\resources\default -raw) -replace $currentsubdomain,$newsubdomain ) | Set-Content -path .\2_packer-build-aws-ami-images\resources\default
 
+# CONFIGURE CHAPTER 3 TERRAFORM FILES
 
 Get-ChildItem ".\3_terraform-deploy-platform\" -Filter *.tf | 
 Foreach-Object {

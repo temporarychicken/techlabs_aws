@@ -13,52 +13,52 @@ data "aws_route53_zone" "selected" {
 }
 
 
-resource "aws_route53_record" "techlab0001-apimanager" {
+resource "aws_route53_record" "peanuts-apimanager" {
   zone_id = data.aws_route53_zone.selected.zone_id
-  name    = "apimanager.techlab0001.${data.aws_route53_zone.selected.name}"
+  name    = "apimanager.peanuts.${data.aws_route53_zone.selected.name}"
   type    = "A"
   ttl     = "60"
 # records = ["${chomp(http.myip.body)}"]
-  records = [ aws_instance.techlab0001-axwayv7.public_ip ]
+  records = [ aws_instance.peanuts-axwayv7.public_ip ]
 
 }
 
 
-resource "aws_route53_record" "techlab0001-apigateway" {
+resource "aws_route53_record" "peanuts-apigateway" {
   zone_id = data.aws_route53_zone.selected.zone_id
-  name    = "apigateway.techlab0001.${data.aws_route53_zone.selected.name}"
+  name    = "apigateway.peanuts.${data.aws_route53_zone.selected.name}"
   type    = "A"
   ttl     = "60"
-  records = [ aws_instance.techlab0001-axwayv7.public_ip ]
+  records = [ aws_instance.peanuts-axwayv7.public_ip ]
 
 }
 
-resource "aws_route53_record" "techlab0001-apiportal" {
+resource "aws_route53_record" "peanuts-apiportal" {
   zone_id = data.aws_route53_zone.selected.zone_id
-  name    = "apiportal.techlab0001.${data.aws_route53_zone.selected.name}"
+  name    = "apiportal.peanuts.${data.aws_route53_zone.selected.name}"
   type    = "A"
   ttl     = "60"
-  records = [ aws_instance.techlab0001-axwayv7.public_ip ]
+  records = [ aws_instance.peanuts-axwayv7.public_ip ]
 
 }
 
-resource "aws_route53_record" "techlab0001-apibuilder" {
+resource "aws_route53_record" "peanuts-apibuilder" {
   zone_id = data.aws_route53_zone.selected.zone_id
-  name    = "apibuilder.techlab0001.${data.aws_route53_zone.selected.name}"
+  name    = "apibuilder.peanuts.${data.aws_route53_zone.selected.name}"
   type    = "A"
   ttl     = "60"
-  records = [ aws_instance.techlab0001-axwayv7.public_ip ]
+  records = [ aws_instance.peanuts-axwayv7.public_ip ]
 
 }
 
 
-resource "aws_route53_record" "techlab0001-jenkins" {
+resource "aws_route53_record" "peanuts-jenkins" {
   zone_id = data.aws_route53_zone.selected.zone_id
-  name    = "jenkins.techlab0001.${data.aws_route53_zone.selected.name}"
+  name    = "jenkins.peanuts.${data.aws_route53_zone.selected.name}"
   type    = "A"
   ttl     = "60"
 # records = ["${chomp(http.myip.body)}"]
-  records = [ aws_instance.techlab0001-axwayv7.public_ip ]
+  records = [ aws_instance.peanuts-axwayv7.public_ip ]
 
 }
 
@@ -67,6 +67,7 @@ resource "aws_route53_record" "techlab0001-jenkins" {
 data "http" "myip" {
   url = "https://api.ipify.org"
 }
+
 
 
 
