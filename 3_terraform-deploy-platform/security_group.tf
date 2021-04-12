@@ -4,6 +4,15 @@ resource "aws_security_group" "techlab0001-nginx-web-facing" {
   vpc_id      = aws_vpc.techlab0001-main.id
 
   ingress {
+    description = "MYSQL"
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+
+  }
+
+  ingress {
     description = "HTTPS"
     from_port   = 443
     to_port     = 443

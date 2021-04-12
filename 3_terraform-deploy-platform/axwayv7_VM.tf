@@ -62,6 +62,10 @@ resource "null_resource" "post-instantiation-VM-actions" {
 		"sudo cp default /etc/nginx/sites-enabled/",
 		"sudo cp resources/.htpasswd /etc/nginx/.htpasswd",
 		"sudo nginx -s reload",
+		"sudo cp /var/lib/jenkins/secrets/initialAdminPassword /home/ubuntu/jenkins_initial_password",
+	    "sudo chmod +r jenkins_initial_password",
+		"echo 'The initial Jenkins password for your techlab is:'",
+		"cat jenkins_initial_password",
 	
 		
 	    "#sudo ./APIGateway_7.7.20210130_Install_linux-x86-64_BN04.run --mode unattended --unattendedmodeui minimalWithDialogs --setup_type complete --adminpasswd Space*117 --changeCredentials 0 --apimgmtusername apiadmin --apiadminpasswd Space*117 --changeApimgmtCredentials 0 --licenseFilePath resources/api7.lic --analyticsLicenseFilePath resources/api7.lic --apimgmtLicenseFilePath resources/api7.lic --prefix /opt/Axway-7.7.0 --cassandraInstalldir /opt --cassandraJDK  /usr/lib/jvm/java-8-openjdk-amd64/jre --startCassandra 1",
