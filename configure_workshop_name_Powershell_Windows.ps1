@@ -6,9 +6,10 @@ if ( $currentsubdomain -eq '' )
 
 echo $currentsubdomain
 
-# CONFIGURE CHAPTER 1 TERRAFORM FILES
-
 $newsubdomain = Read-Host -Prompt 'Input the subdomain name for your techlab. The resultant domain name for your techlab will be <<yourinput>>.axwaydemo.net'
+
+
+# CONFIGURE CHAPTER 1 TERRAFORM FILES
 
 Get-ChildItem ".\1_terraform-create-or-refresh-certs\" -Filter *.tf | 
 Foreach-Object {
@@ -33,6 +34,26 @@ Foreach-Object {
 # CONFIGURE CHAPTER 3 TERRAFORM FILES
 
 Get-ChildItem ".\3_terraform-deploy-platform\" -Filter *.tf | 
+Foreach-Object {
+
+    ((Get-Content -path .\3_terraform-deploy-platform\$_ -raw) -replace $currentsubdomain,$newsubdomain ) | Set-Content -path .\3_terraform-deploy-platform\$_
+
+}
+
+
+# CONFIGURE CHAPTER 3 HTML FILES
+
+Get-ChildItem ".\3_terraform-deploy-platform\" -Filter *.html | 
+Foreach-Object {
+
+    ((Get-Content -path .\3_terraform-deploy-platform\$_ -raw) -replace $currentsubdomain,$newsubdomain ) | Set-Content -path .\3_terraform-deploy-platform\$_
+
+}
+
+
+# CONFIGURE CHAPTER 3 START TECHLAB SCRIPT
+
+Get-ChildItem ".\3_terraform-deploy-platform\" -Filter start_techlab.ps1 | 
 Foreach-Object {
 
     ((Get-Content -path .\3_terraform-deploy-platform\$_ -raw) -replace $currentsubdomain,$newsubdomain ) | Set-Content -path .\3_terraform-deploy-platform\$_
