@@ -62,6 +62,15 @@ resource "aws_route53_record" "techlab0001-jenkins" {
 
 }
 
+resource "aws_route53_record" "techlab0001-api" {
+  zone_id = data.aws_route53_zone.selected.zone_id
+  name    = "api.techlab0001.${data.aws_route53_zone.selected.name}"
+  type    = "A"
+  ttl     = "60"
+# records = ["${chomp(http.myip.body)}"]
+  records = [ aws_instance.techlab0001-axwayv7.public_ip ]
+
+}
 
 # This gets your IP from a simple HTTP request - note it's V4.
 data "http" "myip" {

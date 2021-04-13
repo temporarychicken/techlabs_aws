@@ -49,7 +49,7 @@
 	  "echo '#################################################################################################################'",
 	  "echo 'SETTING HOSTNAME FOR OUR API MANAGER SERVER'",
 	  "echo '#################################################################################################################'",
-	  "sudo hostnamectl set-hostname apimanager",
+	  "sudo hostnamectl set-hostname apimanagerv7",
 
 	  "echo '#################################################################################################################'",
 	  "echo 'INSTALL JENKINS AUTOMATION SERVER'",
@@ -87,9 +87,10 @@
       "sudo mysql -u root -e \"grant all privileges on *.* to 'apibuilderuser'@'%.%.%.%' IDENTIFIED BY 'Space*117';\"",
       "sudo mysql -u root -e \"grant all privileges on *.* to 'apiportaluser'@'%.%.%.%' IDENTIFIED BY 'Space*117';\"",
 	  "sudo mysql -u root -e \"CREATE DATABASE test /*!40100 COLLATE 'latin1_swedish_ci' */;\"",
-	  
+	  "sudo mysql -u root -e \"CREATE DATABASE apiportal /*!40100 COLLATE 'latin1_swedish_ci' */;\"",
+
 	  "# Allow Access to MYSQL from external IP addresses",
-	  "sudo sed -i 's/ 127.0.0.1/ 10.0.1.20/g' /etc/mysql/mysql.conf.d/mysqld.cnf",
+	  "sudo sed -i 's/ 127.0.0.1/ 0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf",
       "cat /etc/mysql/mysql.conf.d/mysqld.cnf",
  
  	  "echo '#################################################################################################################'",
@@ -109,7 +110,7 @@
 	  "wget https://packer-build-resources.s3.eu-west-2.amazonaws.com/APIPortal_7.7_DockerImage_linux-x86-64_BN450.tar",
 	  "sudo docker load -i APIPortal_7.7_DockerImage_linux-x86-64_BN450.tar",
       "#Start the API Portal Docker Container",
-      "#sudo docker container run --name apiportal -p 32081:80 -e MYSQL_HOST=apimanager.axwaydemo.co.uk -e MYSQL_PORT=3306 -e MYSQL_DATABASE=apiportal -e MYSQL_USER=apiportaluser -e MYSQL_PASSWORD=Space*117 -e APIMANAGER_HOST=techlab0001.apimanager.axwaydemo.co.uk -e APIMANAGER_PORT=8075 axway/apiportal:7.7.20210130",
+      "#sudo docker container run --name apiportal -p 32081:80 -e MYSQL_HOST=apimanager.axwaydemo.co.uk -e MYSQL_PORT=3306 -e MYSQL_DATABASE=apiportal -e MYSQL_USER=apiportaluser -e MYSQL_PASSWORD=Space*117 -e APIMANAGER_HOST=apiportalv7 -e APIMANAGER_PORT=8075 axway/apiportal:7.7.20210130",
  
 
 	  

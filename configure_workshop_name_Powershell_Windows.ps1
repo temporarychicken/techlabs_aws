@@ -6,8 +6,15 @@ if ( $currentsubdomain -eq '' )
 
 echo $currentsubdomain
 
-$newsubdomain = Read-Host -Prompt 'Input the subdomain name for your techlab. The resultant domain name for your techlab will be <<yourinput>>.axwaydemo.net'
-
+echo 'Input the subdomain name for your techlab. The resultant domain name for your techlab will be <<yourinput>>.axwaydemo.net'
+echo 'This should be lower-case letters and numbers only and should not be left blank'
+$newsubdomain = ""
+Do {$newsubdomain = Read-Host -Prompt 'Please enter the new subdomain name for your techlab. '}
+until  ($newsubdomain -ne "")
+echo ""
+echo "Rewriting old subdomain: " $currentsubdomain
+echo "Using new subdomain: " $newsubdomain
+echo "..."
 
 # CONFIGURE CHAPTER 1 TERRAFORM FILES
 
