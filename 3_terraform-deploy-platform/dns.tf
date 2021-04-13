@@ -13,62 +13,62 @@ data "aws_route53_zone" "selected" {
 }
 
 
-resource "aws_route53_record" "techlab0001-apimanager" {
+resource "aws_route53_record" "techlab0002-apimanager" {
   zone_id = data.aws_route53_zone.selected.zone_id
-  name    = "apimanager.techlab0001.${data.aws_route53_zone.selected.name}"
+  name    = "apimanager.techlab0002.${data.aws_route53_zone.selected.name}"
   type    = "A"
   ttl     = "60"
 # records = ["${chomp(http.myip.body)}"]
-  records = [ aws_instance.techlab0001-axwayv7.public_ip ]
+  records = [ aws_instance.techlab0002-axwayv7.public_ip ]
 
 }
 
 
-resource "aws_route53_record" "techlab0001-apigateway" {
+resource "aws_route53_record" "techlab0002-apigateway" {
   zone_id = data.aws_route53_zone.selected.zone_id
-  name    = "apigateway.techlab0001.${data.aws_route53_zone.selected.name}"
+  name    = "apigateway.techlab0002.${data.aws_route53_zone.selected.name}"
   type    = "A"
   ttl     = "60"
-  records = [ aws_instance.techlab0001-axwayv7.public_ip ]
+  records = [ aws_instance.techlab0002-axwayv7.public_ip ]
 
 }
 
-resource "aws_route53_record" "techlab0001-apiportal" {
+resource "aws_route53_record" "techlab0002-apiportal" {
   zone_id = data.aws_route53_zone.selected.zone_id
-  name    = "apiportal.techlab0001.${data.aws_route53_zone.selected.name}"
+  name    = "apiportal.techlab0002.${data.aws_route53_zone.selected.name}"
   type    = "A"
   ttl     = "60"
-  records = [ aws_instance.techlab0001-axwayv7.public_ip ]
+  records = [ aws_instance.techlab0002-axwayv7.public_ip ]
 
 }
 
-resource "aws_route53_record" "techlab0001-apibuilder" {
+resource "aws_route53_record" "techlab0002-apibuilder" {
   zone_id = data.aws_route53_zone.selected.zone_id
-  name    = "apibuilder.techlab0001.${data.aws_route53_zone.selected.name}"
+  name    = "apibuilder.techlab0002.${data.aws_route53_zone.selected.name}"
   type    = "A"
   ttl     = "60"
-  records = [ aws_instance.techlab0001-axwayv7.public_ip ]
+  records = [ aws_instance.techlab0002-axwayv7.public_ip ]
 
 }
 
 
-resource "aws_route53_record" "techlab0001-jenkins" {
+resource "aws_route53_record" "techlab0002-jenkins" {
   zone_id = data.aws_route53_zone.selected.zone_id
-  name    = "jenkins.techlab0001.${data.aws_route53_zone.selected.name}"
-  type    = "A"
-  ttl     = "60"
-# records = ["${chomp(http.myip.body)}"]
-  records = [ aws_instance.techlab0001-axwayv7.public_ip ]
-
-}
-
-resource "aws_route53_record" "techlab0001-api" {
-  zone_id = data.aws_route53_zone.selected.zone_id
-  name    = "api.techlab0001.${data.aws_route53_zone.selected.name}"
+  name    = "jenkins.techlab0002.${data.aws_route53_zone.selected.name}"
   type    = "A"
   ttl     = "60"
 # records = ["${chomp(http.myip.body)}"]
-  records = [ aws_instance.techlab0001-axwayv7.public_ip ]
+  records = [ aws_instance.techlab0002-axwayv7.public_ip ]
+
+}
+
+resource "aws_route53_record" "techlab0002-api" {
+  zone_id = data.aws_route53_zone.selected.zone_id
+  name    = "api.techlab0002.${data.aws_route53_zone.selected.name}"
+  type    = "A"
+  ttl     = "60"
+# records = ["${chomp(http.myip.body)}"]
+  records = [ aws_instance.techlab0002-axwayv7.public_ip ]
 
 }
 
@@ -76,6 +76,8 @@ resource "aws_route53_record" "techlab0001-api" {
 data "http" "myip" {
   url = "https://api.ipify.org"
 }
+
+
 
 
 

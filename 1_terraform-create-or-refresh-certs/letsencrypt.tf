@@ -23,7 +23,7 @@ resource "acme_registration" "reg" {
 
 resource "acme_certificate" "certificate" {
   account_key_pem           = acme_registration.reg.account_key_pem
-  common_name               = "*.techlab0001.axwaydemo.net"
+  common_name               = "*.techlab0002.axwaydemo.net"
  
   dns_challenge {
     provider = "route53"
@@ -32,17 +32,17 @@ resource "acme_certificate" "certificate" {
 
 resource "local_file" "crt" {
     content     = acme_certificate.certificate.certificate_pem
-    filename = "../certs/techlab0001.axwaydemo.net.crt.pem"
+    filename = "../certs/techlab0002.axwaydemo.net.crt.pem"
 }
 
 resource "local_file" "key" {
     content     = acme_certificate.certificate.private_key_pem
-    filename = "../certs/techlab0001.axwaydemo.net.key.pem"
+    filename = "../certs/techlab0002.axwaydemo.net.key.pem"
 }
 
 resource "local_file" "issuer" {
     content     = acme_certificate.certificate.issuer_pem
-    filename = "../certs/techlab0001.axwaydemo.net.issuer.pem"
+    filename = "../certs/techlab0002.axwaydemo.net.issuer.pem"
 }
 
 resource "local_file" "nginx-crt" {
@@ -54,6 +54,8 @@ resource "local_file" "nginx-key" {
     content = acme_certificate.certificate.private_key_pem
 	filename = "../certs/privkey.pem"
 }
+
+
 
 
 

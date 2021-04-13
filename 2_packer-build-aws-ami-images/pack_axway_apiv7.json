@@ -12,6 +12,13 @@
       "name": "techlab-axwayv7",
       "ami_name": "techlab-axwayv7-{{isotime \"2006-01-02\"}}-{{uuid}}",
       "instance_type": "t2.large",
+      "launch_block_device_mappings": [
+        {
+		"volume_size": 16,
+        "device_name": "/dev/sda1"
+        }
+      ],
+	  
       "region": "{{user `region`}}",
       "source_ami": "ami-006a0174c6c25ac06",
       "ssh_username": "ubuntu",
@@ -49,7 +56,7 @@
 	  "echo '#################################################################################################################'",
 	  "echo 'SETTING HOSTNAME FOR OUR API MANAGER SERVER'",
 	  "echo '#################################################################################################################'",
-	  "sudo hostnamectl set-hostname apimanagerv7",
+	  "sudo hostnamectl set-hostname apimanager",
 
 	  "echo '#################################################################################################################'",
 	  "echo 'INSTALL JENKINS AUTOMATION SERVER'",
@@ -111,7 +118,7 @@
 	  "sudo docker load -i APIPortal_7.7_DockerImage_linux-x86-64_BN450.tar",
       "#Start the API Portal Docker Container",
       "#sudo docker container run --name apiportal -p 32081:80 -e MYSQL_HOST=apimanager.axwaydemo.co.uk -e MYSQL_PORT=3306 -e MYSQL_DATABASE=apiportal -e MYSQL_USER=apiportaluser -e MYSQL_PASSWORD=Space*117 -e APIMANAGER_HOST=apiportalv7 -e APIMANAGER_PORT=8075 axway/apiportal:7.7.20210130",
- 
+ 	  "rm -f APIPortal_7.7_DockerImage_linux-x86-64_BN450.tar,",
 
 	  
 	  "echo '#################################################################################################################'",
@@ -142,6 +149,13 @@
 	  "sudo npm install -g @axway/amplify-cli",
       "amplify pm install @axway/amplify-api-builder-cli",
       "npm install @axway-api-builder-ext/api-builder-plugin-dc-postgres",
+
+      "#sudo npm install -g @axway/axway-central-cli",
+      "#sudo axway pm install @axway/axway-central-cli",
+	  "#axway pm list",
+	  "#axway pm install @axway/amplify-api-builder-cli",
+	  "#npm install @axway-api-builder-ext/api-builder-plugin-dc-postgres",
+	  
       "amplify builder init mybuilderproject",
       "cd mybuilderproject/",
       "sudo npm install @axway/api-builder-plugin-dc-mysql",
@@ -171,7 +185,13 @@
       "echo 'DOWNLOADING THE SSH KEY TO ENABLE FUTURE ACCESS TO THIS SERVER'",
 	  "echo '#################################################################################################################'",
 	  "ssh-keygen -f /tmp/sshkey -q -N ''",
-   	  "chmod +r /tmp/sshkey"
+   	  "chmod +r /tmp/sshkey",
+
+
+      "echo '#################################################################################################################'",
+      "echo 'CLEANING UP OLD V7 INSTALLER TO FREE UP SPACE'",
+	  "echo '#################################################################################################################'",
+	  "rm -f APIGateway_7.7.20210130_Install_linux-x86-64_BN04.run"
 	  
       ],
       "only": [
