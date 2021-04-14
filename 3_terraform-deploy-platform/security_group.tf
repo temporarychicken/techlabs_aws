@@ -1,7 +1,7 @@
-resource "aws_security_group" "techlab0002-nginx-web-facing" {
+resource "aws_security_group" "george-lab-nginx-web-facing" {
   name        = "nginx-web-facing"
   description = "Allow TLS,HTTP,SSH inbound traffic"
-  vpc_id      = aws_vpc.techlab0002-main.id
+  vpc_id      = aws_vpc.george-lab-main.id
 
   ingress {
     description = "MYSQL"
@@ -11,6 +11,16 @@ resource "aws_security_group" "techlab0002-nginx-web-facing" {
     cidr_blocks = ["0.0.0.0/0"]
 
   }
+
+  ingress {
+    description = "RDP"
+    from_port   = 3389
+    to_port     = 3389
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+
+  }
+
 
   ingress {
     description = "HTTPS"
@@ -75,6 +85,9 @@ resource "aws_security_group" "techlab0002-nginx-web-facing" {
     Name = "workshop0001-axwayv7"
   }
 }
+
+
+
 
 
 
