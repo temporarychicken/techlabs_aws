@@ -1,0 +1,254 @@
+{
+  "description": "Create an NGINX Plus and two NGINX Open Source Images",
+  "variables": {
+    "home": "{{env `HOME`}}",
+    "aws_access_key": "",
+    "aws_secret_key": "",
+    "region": "eu-west-2"
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "name": "techlab-axwayv7",
+      "ami_name": "techlab-axwayv7-{{isotime \"2006-01-02\"}}-{{uuid}}",
+      "instance_type": "t2.large",
+      "launch_block_device_mappings": [
+        {
+		"volume_size": 16,
+        "device_name": "/dev/sda1"
+        }
+      ],
+	  
+      "region": "{{user `region`}}",
+      "source_ami": "ami-006a0174c6c25ac06",
+      "ssh_username": "ubuntu",
+      "access_key": "{{user `aws_access_key`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "tags": {
+        "Name": "techlab-axwayv7"
+      }
+    }
+  ],
+  "provisioners": [
+
+    {
+      "type": "file",
+      "source": "resources",
+      "destination": "resources",
+      "only": [
+        "techlab-axwayv7"
+      ]
+    },
+
+    {
+      "type": "file",
+      "source": "../certs",
+      "destination": "certs",
+      "only": [
+        "techlab-axwayv7"
+      ]
+    },
+
+    {
+      "type": "shell",
+      "inline": [
+	
+	  "echo '#################################################################################################################'",
+	  "echo 'INSTALL UBUNTU DESKTOP'",
+	  "echo '#################################################################################################################'",	
+
+	  "sudo apt-get update -y",
+	  "sudo apt-get install xfce4 xfce4-goodies xorg dbus-x11 x11-xserver-utils -y",	  
+	  "sudo apt-get install xrdp -y",
+	  "sudo systemctl status xrdp",
+	  "sudo adduser xrdp ssl-cert",
+	  "sudo systemctl restart xrdp",
+	  "sudo ufw allow 3389",
+	  "wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb",
+      "until sudo apt-get update -y; do sleep 10; done",
+	  "sudo apt-get install ./google-chrome-stable_current_amd64.deb -y",
+
+      "until sudo apt-get update -y; do sleep 10; done",
+
+	  "sudo echo -e 'ubuntu\nubuntu' | (sudo passwd ubuntu)",
+
+	  
+	  "echo '#################################################################################################################'",
+	  "echo 'SETTING HOSTNAME FOR OUR API MANAGER SERVER'",
+	  "echo '#################################################################################################################'",
+	  "sudo hostnamectl set-hostname apimanager",
+
+	  "echo '#################################################################################################################'",
+	  "echo 'INSTALL JENKINS AUTOMATION SERVER'",
+	  "echo '#################################################################################################################'",
+	  "sudo apt-get update -y",
+	  "sudo apt-get install openjdk-8-jre-headless -y",
+	  "wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -",
+      "sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'",
+      "sudo apt-get update",
+      "sudo apt-get install jenkins -y",
+      "#Change the default listening port from 8080 to 32080. Change the variable HTTP_PORT in the file below:",
+      "sudo sed -i 's/HTTP_PORT=8080/HTTP_PORT=32080/g' /etc/default/jenkins",
+
+
+	  "echo '#################################################################################################################'",
+	  "echo 'INSTALLING MY SQL VERSION 5.7 for use with API PORTAL AND API BUILDER CRUD APIS'",
+	  "echo '#################################################################################################################'",
+      "#wget https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-server_5.7.33-1ubuntu18.04_i386.deb",
+      "#wget https://dev.mysql.com/get/mysql-apt-config_0.8.12-1_all.deb",
+      "#sudo dpkg -i mysql-apt-config_0.8.12-1_all.deb",
+      "#sudo apt-cache policy mysql-server",
+      "#sudo apt install -f mysql-client=5.7.33-0ubuntu18.04.1 mysql-community-server=5.7.33-0ubuntu18.04.1 mysql-server=5.7.33-0ubuntu18.04.1 -y",
+
+      "sudo apt-get update",
+      "sudo apt-get install mysql-client mysql-server -y",
+
+	  "echo '#################################################################################################################'",
+	  "echo 'CONFIGURE MYSQL ACCESS PRIVILEGES AND CREATE APIPORTAL AND APIBUILDER ACCOUNTS'",
+	  "echo '#################################################################################################################'",
+
+      "# Change the mySQL bind address to allow external access",
+
+      "# Allow access to the database for user: mortgageuser from any IP address:",
+      "# Note, the usual password on mysql is 123456 for the root user",
+      "sudo mysql -u root -e \"grant all privileges on *.* to 'apibuilderuser'@'%.%.%.%' IDENTIFIED BY 'Space*117';\"",
+      "sudo mysql -u root -e \"grant all privileges on *.* to 'apiportaluser'@'%.%.%.%' IDENTIFIED BY 'Space*117';\"",
+	  "sudo mysql -u root -e \"CREATE DATABASE test /*!40100 COLLATE 'latin1_swedish_ci' */;\"",
+	  "sudo mysql -u root -e \"CREATE DATABASE apiportal /*!40100 COLLATE 'latin1_swedish_ci' */;\"",
+
+	  "# Allow Access to MYSQL from external IP addresses",
+	  "sudo sed -i 's/ 127.0.0.1/ 0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf",
+      "cat /etc/mysql/mysql.conf.d/mysqld.cnf",
+ 
+ 	  "echo '#################################################################################################################'",
+	  "echo 'INSTALL API PORTAL AND PREREQUISITE DOCKER DAEMON'",
+	  "echo '#################################################################################################################'",
+      "#Install DOCKER Community Edition",
+   
+      "sudo apt install apt-transport-https ca-certificates curl software-properties-common gnupg -y",
+      "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -",
+      "sudo apt-key fingerprint 0EBFCD88",
+      "sudo add-apt-repository 'deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable'",
+      "sudo apt update",
+      "sudo apt install docker-ce -y",
+      "echo $USER",
+      "sudo usermod -aG docker $USER",
+      "# Load the API Portal Docker Image",
+	  "wget https://packer-build-resources.s3.eu-west-2.amazonaws.com/APIPortal_7.7_DockerImage_linux-x86-64_BN450.tar",
+	  "sudo docker load -i APIPortal_7.7_DockerImage_linux-x86-64_BN450.tar",
+      "#Start the API Portal Docker Container",
+      "#sudo docker container run --name apiportal -p 32081:80 -e MYSQL_HOST=apimanager.axwaydemo.co.uk -e MYSQL_PORT=3306 -e MYSQL_DATABASE=apiportal -e MYSQL_USER=apiportaluser -e MYSQL_PASSWORD=Space*117 -e APIMANAGER_HOST=apiportalv7 -e APIMANAGER_PORT=8075 axway/apiportal:7.7.20210130",
+ 	  "rm -f APIPortal_7.7_DockerImage_linux-x86-64_BN450.tar,",
+
+	  
+	  "echo '#################################################################################################################'",
+	  "echo 'CONFIGURING THE SYSTEMD INIT SCRIPTS FOR AUTOMATIC START OF AXWAY V7 AND RELATED SERVICES'",
+      "echo '#################################################################################################################'",
+	  "chmod +x resources/scripts/*",
+	  "sudo cp resources/system/cassandra.service /etc/systemd/system",
+	  "sudo systemctl enable cassandra",
+	  "sudo cp resources/system/nodemanager.service /etc/systemd/system",
+	  "sudo systemctl enable nodemanager",
+	  "sudo cp resources/system/quickstart.service /etc/systemd/system",
+	  "sudo systemctl enable quickstart",
+	  "sudo cp resources/system/apibuilder.service /etc/systemd/system",
+	  "sudo systemctl enable apibuilder",
+	  "sudo cp resources/system/apiportal.service /etc/systemd/system",
+	  "sudo systemctl enable apiportal",
+	  
+	  "echo '#################################################################################################################'",
+	  "echo 'INSTALLING NODE JS VERSION 14 (A pre-requisite for API Builder)'",
+	  "echo '#################################################################################################################'",
+      "curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -",
+      "sudo apt-get remove nodejs -y",
+      "sudo apt-get install nodejs -y",
+
+      "echo '#################################################################################################################'",
+	  "echo 'INSTALLING API BUILDER'",
+	  "echo '#################################################################################################################'",
+	  "sudo npm install -g @axway/amplify-cli",
+      "amplify pm install @axway/amplify-api-builder-cli",
+      "npm install @axway-api-builder-ext/api-builder-plugin-dc-postgres",
+
+      "#sudo npm install -g @axway/axway-central-cli",
+      "#sudo axway pm install @axway/axway-central-cli",
+	  "#axway pm list",
+	  "#axway pm install @axway/amplify-api-builder-cli",
+	  "#npm install @axway-api-builder-ext/api-builder-plugin-dc-postgres",
+	  
+      "amplify builder init mybuilderproject",
+      "cd mybuilderproject/",
+      "sudo npm install @axway/api-builder-plugin-dc-mysql",
+      "cd ../",
+	  
+	  "echo '#################################################################################################################'",
+	  "echo 'CHANGING THE DEFAULT API BUILDER PORT NUMBER TO 8083 TO AVOID PORT CONFLICT'",
+	  "echo '#################################################################################################################'",
+	  "sed -i 's/ parseInt(process.env.PORT) || 8080/ 8083/g' mybuilderproject/conf/default.js",
+
+	  "echo '#################################################################################################################'",
+	  "echo 'INSTALL PREREQUISITES FOR AMPLIFY/AXWAY CLI'",
+	  "echo '#################################################################################################################'",	
+	
+	  "sudo apt-get install libsecret-1-dev -y",
+	  "amplify pm install @axway/amplify-central-cli ",
+	  "amplify config set auth.tokenStoreType file",
+
+      "echo '#################################################################################################################'",  
+	  "echo 'DOWLOADING AND INSTALLING AXWAY API MANAGER INCLUDING PREREQUISITES'",
+	  "echo '#################################################################################################################'",
+	  "wget https://packer-build-resources.s3.eu-west-2.amazonaws.com/APIGateway_7.7.20210130_Install_linux-x86-64_BN04.run",
+	  "chmod +x APIGateway_7.7.20210130_Install_linux-x86-64_BN04.run",
+	  "sudo apt-get update -y",
+	  "#sudo apt-get install openjdk-8-jre-headless -y",
+      "sudo ./APIGateway_7.7.20210130_Install_linux-x86-64_BN04.run --mode unattended --unattendedmodeui minimalWithDialogs --nmHostnameOrIpChoice 127.0.0.1 --rnmConnectionUrl https://127.0.0.1:8090 --setup_type complete --adminpasswd Space*117 --changeCredentials 0 --apimgmtusername apiadmin --apiadminpasswd Space*117 --changeApimgmtCredentials 0 --licenseFilePath resources/api7.lic --analyticsLicenseFilePath resources/api7.lic --apimgmtLicenseFilePath resources/api7.lic --prefix /opt/Axway-7.7.0 --cassandraInstalldir /opt --cassandraJDK  /usr/lib/jvm/java-8-openjdk-amd64/jre --startCassandra 0",
+
+
+	  "echo '##################################################################################################################'",
+      "echo 'INSTALLING THE NGINX REVERSE PROXY TO ENABLE TLS TERMINATION AT THE REVERSE-PROXY FRONT-END'",
+	  "echo '#################################################################################################################'",
+      "sudo -H apt-get install -y nginx",
+
+      "echo '#################################################################################################################'",
+      "echo 'DOWNLOADING THE SSH KEY TO ENABLE FUTURE ACCESS TO THIS SERVER'",
+	  "echo '#################################################################################################################'",
+	  "ssh-keygen -f /tmp/sshkey -q -N ''",
+   	  "chmod +r /tmp/sshkey",
+
+
+      "echo '#################################################################################################################'",
+      "echo 'CLEANING UP OLD V7 INSTALLER TO FREE UP SPACE'",
+	  "echo '#################################################################################################################'",
+	  "rm -f APIGateway_7.7.20210130_Install_linux-x86-64_BN04.run"
+	  
+      ],
+      "only": [
+        "techlab-axwayv7"
+      ]
+    },
+
+   {
+      "type": "file",
+      "destination": "../keys/axwayv7-key.pub",
+      "source": "/tmp/sshkey.pub",
+	  "direction" : "download",
+      "only": [
+        "techlab-axwayv7"
+      ]
+    },
+   {
+      "type": "file",
+      "destination": "../keys/axwayv7-key.pem",
+      "source": "/tmp/sshkey",
+	  "direction" : "download",
+      "only": [
+        "techlab-axwayv7"
+      ]
+    }
+	
+  ]
+}
+
+
+
+
