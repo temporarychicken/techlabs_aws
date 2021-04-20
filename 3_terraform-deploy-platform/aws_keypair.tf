@@ -1,8 +1,13 @@
 
-resource "aws_key_pair" "george-lab-axwayv7-key" {
-  key_name   = "george-lab-axwayv7-key"
+resource "aws_key_pair" "workshop-0001-axwayv7-key" {
+  key_name   = "workshop-0001-axwayv7-key"
   public_key = file ("../keys/axwayv7-key.pub")
 }
+
+
+
+
+
 
 
 

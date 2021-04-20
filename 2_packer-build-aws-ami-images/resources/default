@@ -2,12 +2,12 @@ server {
     return 301 https://$host$request_uri;
     listen 80 ;
     listen [::]:80 ;
-    server_name george-lab.axwaydemo.net;
+    server_name workshop-0001.axwaydemo.net;
 
 }
 
 server {
-    server_name apibuilder.george-lab.axwaydemo.net;
+    server_name apibuilder.workshop-0001.axwaydemo.net;
     listen 443 ssl;
     ssl_certificate /home/ubuntu/certs/fullchain.pem; # managed by Certbot
     ssl_certificate_key /home/ubuntu/certs/privkey.pem; # managed by Certbot
@@ -38,7 +38,7 @@ server {
 }
 
 server {
-    server_name apimanager.george-lab.axwaydemo.net;
+    server_name apimanager.workshop-0001.axwaydemo.net;
     listen 443 ssl;
     ssl_certificate /home/ubuntu/certs/fullchain.pem; # managed by Certbot
     ssl_certificate_key /home/ubuntu/certs/privkey.pem; # managed by Certbot
@@ -57,7 +57,7 @@ server {
 }
 
 server {
-    server_name apigateway.george-lab.axwaydemo.net;
+    server_name apigateway.workshop-0001.axwaydemo.net;
     listen 443 ssl;
     ssl_certificate /home/ubuntu/certs/fullchain.pem; # managed by Certbot
     ssl_certificate_key /home/ubuntu/certs/privkey.pem; # managed by Certbot
@@ -75,7 +75,7 @@ server {
 }
 
 server {
-    server_name api.george-lab.axwaydemo.net;
+    server_name api.workshop-0001.axwaydemo.net;
     listen 443 ssl;
     ssl_certificate /home/ubuntu/certs/fullchain.pem; # managed by Certbot
     ssl_certificate_key /home/ubuntu/certs/privkey.pem; # managed by Certbot
@@ -94,7 +94,7 @@ server {
 
 
 server {
-    server_name jenkins.george-lab.axwaydemo.net;
+    server_name jenkins.workshop-0001.axwaydemo.net;
     listen 443 ssl;
     ssl_certificate /home/ubuntu/certs/fullchain.pem; # managed by Certbot
     ssl_certificate_key /home/ubuntu/certs/privkey.pem; # managed by Certbot
@@ -116,7 +116,7 @@ server {
 
 
 server {
-    server_name apiportal.george-lab.axwaydemo.net;
+    server_name apiportal.workshop-0001.axwaydemo.net;
     listen 443 ssl;
     ssl_certificate /home/ubuntu/certs/fullchain.pem; # managed by Certbot
     ssl_certificate_key /home/ubuntu/certs/privkey.pem; # managed by Certbot
@@ -133,6 +133,11 @@ server {
         proxy_pass http://127.0.0.1:32081;
     }
 }
+
+
+
+
+
 
 
 

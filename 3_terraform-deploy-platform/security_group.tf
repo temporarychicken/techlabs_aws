@@ -1,7 +1,7 @@
-resource "aws_security_group" "george-lab-nginx-web-facing" {
+resource "aws_security_group" "workshop-0001-nginx-web-facing" {
   name        = "nginx-web-facing"
   description = "Allow TLS,HTTP,SSH inbound traffic"
-  vpc_id      = aws_vpc.george-lab-main.id
+  vpc_id      = aws_vpc.workshop-0001-main.id
 
   ingress {
     description = "MYSQL"
@@ -85,6 +85,11 @@ resource "aws_security_group" "george-lab-nginx-web-facing" {
     Name = "workshop0001-axwayv7"
   }
 }
+
+
+
+
+
 
 
 

@@ -1,6 +1,6 @@
 
 # Fetch AWS Axway V7 AMI identifier
-data "aws_ami" "george-lab-axwayv7" {
+data "aws_ami" "workshop-0001-axwayv7" {
   most_recent = true
   owners      = ["self"]
   filter {
@@ -10,6 +10,11 @@ data "aws_ami" "george-lab-axwayv7" {
     ]
   }
 }
+
+
+
+
+
 
 
 

@@ -1,16 +1,16 @@
-resource "aws_instance" "george-lab-axwayv7" {
-  ami                         = data.aws_ami.george-lab-axwayv7.id # eu-west-2
+resource "aws_instance" "workshop-0001-axwayv7" {
+  ami                         = data.aws_ami.workshop-0001-axwayv7.id # eu-west-2
   instance_type               = "t2.large"
-  key_name                    = "george-lab-axwayv7-key"
-  security_groups             = [aws_security_group.george-lab-nginx-web-facing.id]
-  subnet_id                   = aws_subnet.george-lab-main.id
+  key_name                    = "workshop-0001-axwayv7-key"
+  security_groups             = [aws_security_group.workshop-0001-nginx-web-facing.id]
+  subnet_id                   = aws_subnet.workshop-0001-main.id
   private_ip                  = "10.0.1.20"
   root_block_device {
       volume_size = 16
   }
   
   tags = {
-    Name = "george-lab-axwayv7"
+    Name = "workshop-0001-axwayv7"
   }
 
     provisioner "file" {
@@ -47,7 +47,7 @@ resource "aws_instance" "george-lab-axwayv7" {
 resource "null_resource" "post-instantiation-VM-actions" {
   # Changes to any instance of the cluster requires re-provisioning
   triggers = {
-    trigger1  = aws_route53_record.george-lab-apimanager.ttl
+    trigger1  = aws_route53_record.workshop-0001-apimanager.ttl
   }
   
   provisioner "remote-exec" {
@@ -56,7 +56,7 @@ resource "null_resource" "post-instantiation-VM-actions" {
     type     = "ssh"
     user     = "ubuntu"
 	private_key = file("../keys/axwayv7-key.pem")
-    host     = aws_instance.george-lab-axwayv7.public_ip
+    host     = aws_instance.workshop-0001-axwayv7.public_ip
   }
   
         inline = [
@@ -87,7 +87,7 @@ resource "null_resource" "post-instantiation-VM-actions" {
 resource "null_resource" "configure_nginx_reverse_proxy_with_subdomain_certs" {
 
   triggers = {
-    trigger2 = aws_route53_record.george-lab-apimanager.ttl
+    trigger2 = aws_route53_record.workshop-0001-apimanager.ttl
   }
   
   provisioner "local-exec" {
@@ -95,6 +95,11 @@ resource "null_resource" "configure_nginx_reverse_proxy_with_subdomain_certs" {
 	interpreter = ["PowerShell"]
   }	
 }
+
+
+
+
+
 
 
 
